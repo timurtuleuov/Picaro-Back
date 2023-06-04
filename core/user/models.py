@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from autoslug import AutoSlugField
+from CoreRoot import settings
 from core.abstract.models import AbstractModel, AbstractManager
 from django.dispatch import receiver
 from django.utils.text import slugify
@@ -54,7 +55,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     bio = models.TextField(null=True)
-    avatar = models.ImageField(null=True)
+    avatar = models.ImageField(null=True, upload_to=(settings.MEDIA_ROOT + 'avatar/'))
 
     posts_liked = models.ManyToManyField(
         "core_post.Post",
