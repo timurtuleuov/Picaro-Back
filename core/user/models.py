@@ -55,7 +55,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
 
     bio = models.TextField(null=True)
-    avatar = models.ImageField(null=True, upload_to=(settings.MEDIA_ROOT + 'avatar/'))
+    avatar = models.ImageField(null=True, upload_to='avatar/')
 
     posts_liked = models.ManyToManyField(
         "core_post.Post",
