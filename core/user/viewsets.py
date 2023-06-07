@@ -18,13 +18,13 @@ class UserViewSet(AbstractViewSet):
             return User.objects.all()
         return User.objects.exclude(is_superuser=True)
 
-    def get_object(self):
-        user = self.get_object()
-        posts = Post.objects.filter(author=user)
+    def get_object(self, slug):
+        # user = self.get_object()
+        posts = Post.objects.filter(author__slug=slug)
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
 
-        return obj
+        
     # def get_user_posts(self, request, *args, **kwargs):
     #     user = self.get_object()
     #     posts = Post.objects.filter(author=user)

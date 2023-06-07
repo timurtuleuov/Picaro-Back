@@ -35,5 +35,5 @@ posts_router.register(r'comment', CommentViewSet, basename='post-comment')
 urlpatterns = [
     *router.urls,
     *posts_router.urls,
-    path('user/<slug:pk>/', UserViewSet.as_view({'get': 'get_user_posts'}), name='user-posts'),
+    path('user/<slug:slug>/', UserViewSet.as_view({'get': 'get_user_posts'}), name='user-posts'),
 ]
