@@ -4,7 +4,7 @@ from core.post.viewsets import PostViewSet
 from core.user.viewsets import UserViewSet
 from core.auth.viewsets import RegisterViewSet, LoginViewSet, RefreshViewSet
 from core.comment.viewsets import CommentViewSet
-
+from django.urls import path
 router = routers.SimpleRouter()
 
 # ##################################################################### #
@@ -34,5 +34,6 @@ posts_router.register(r'comment', CommentViewSet, basename='post-comment')
 
 urlpatterns = [
     *router.urls,
-    *posts_router.urls
+    *posts_router.urls,
+    path('user/<slug:pk>/', UserViewSet.as_view({'get': 'get_user_posts'}), name='user-posts'),
 ]

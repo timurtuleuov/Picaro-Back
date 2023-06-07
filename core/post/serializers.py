@@ -20,10 +20,14 @@ class PostSerializer(AbstractSerializer):
             return False
 
         return request.user.has_liked(instance)
-
+    
     def get_likes_count(self, instance):
         return instance.liked_by.count()
-
+    # def get_user_posts(self, obj):
+    #     user_posts_query = Post.objects.filter(author__id=obj.id)
+    #     serializer = UserSerializer(user_posts_query, many=True)
+    #     return serializer.data
+    
     def validate_author(self, value):
         if self.context["request"].user != value:
             raise ValidationError("You can't create a post for another user.")
