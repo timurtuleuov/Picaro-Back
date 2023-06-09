@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 
 from core.abstract.viewsets import AbstractViewSet
-from core.post.models import Post
+from core.post.models import Post, PostImageMapping
 from core.post.serializers import PostSerializer
 from core.auth.permissions import UserPermission
 from core.user.models import User
@@ -18,15 +18,21 @@ class PostViewSet(AbstractViewSet):
 
     def get_object(self):
         obj = Post.objects.get_object_by_public_id(self.kwargs['pk'])
-
         self.check_object_permissions(self.request, obj)
-
         return obj
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        # Сохранение объектов PostImageMapping
+        post = serializer.instance  # Получаем созданный объект Post
+        cover_images = request.data.getlist('cover')  # Получаем список изображений
+
+        for image in cover_images:
+            PostImageMapping.objects.create(post=post, image=image)
+        # Возвращаем данные сериализатора
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(methods=['post'], detail=True)
@@ -50,4 +56,3 @@ class PostViewSet(AbstractViewSet):
         serializer = self.serializer_class(post)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
-
