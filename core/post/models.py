@@ -17,7 +17,8 @@ class Post(AbstractModel):
 
 class PostImageMapping(models.Model):
     image = models.ImageField(upload_to="covers/")
-    post_id = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='image_mappings')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='image_mappings')
+    post_uuid = models.UUIDField()
 
     def __str__(self):
         return str(self.image)

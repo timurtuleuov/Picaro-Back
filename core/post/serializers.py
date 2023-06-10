@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
 
 from core.abstract.serializers import AbstractSerializer
 from core.post.models import Post, PostImageMapping
@@ -8,16 +9,31 @@ from core.user.serializers import UserSerializer
 
 
 class PostImageMappingSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
     class Meta:
         model = PostImageMapping
-        fields = ['id', 'image']
+        fields = ['id', 'image', 'post_id']
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        cover = PostImageMapping.objects.filter(post_id__in=queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+
+        # Добавить связанные изображения в каждый объект поста с порядковыми id
+        for post_data in data:
+            post_id = post_data['__id']
+            post_data['cover'] = PostImageMappingSerializer(cover.filter(post_id=post_id), many=True).data
+
+        return Response(data)
 
 
 class PostSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
     liked = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
-    cover = PostImageMappingSerializer(many=True, required=False)
+    cover = PostImageMappingSerializer(source='images', many=True, read_only=True)
 
     def get_liked(self, instance):
         request = self.context.get('request', None)
