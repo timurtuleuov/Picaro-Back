@@ -31,7 +31,7 @@ class PostViewSet(AbstractViewSet):
         cover_images = request.data.getlist('cover')  # Получаем список изображений
 
         for image in cover_images:
-            PostImageMapping.objects.create(post=post, image=image)
+            PostImageMapping.objects.create(post_id_id=post.id, image=image)
         # Возвращаем данные сериализатора
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
