@@ -32,12 +32,8 @@ class PostViewSet(AbstractViewSet):
          
             
             post_covers = cover.filter(post_uuid=post_id)  # Фильтруем изображения для текущего поста
-            print("Здесь пост ковер")
-            print(post_covers)
-            post_data['cover'] = PostImageMappingSerializer(post_covers, many=True).data
             
-
-        print("здесь ошибка 4")
+            post_data['cover'] = PostImageMappingSerializer(post_covers, many=True).data
 
         return Response(data)
 
