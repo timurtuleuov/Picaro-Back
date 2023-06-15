@@ -20,21 +20,22 @@ class PostViewSet(AbstractViewSet):
         
         post_ids = [post.public_id for post in queryset]  # Список идентификаторов постов
         
-        cover = PostImageMapping.objects.filter(post_uuid=queryset.values_list('public_id', flat=True)) # Используем post_id__in для фильтрации
-        print("ЭТО КОВЕР")
-        print("ЭТО КОВЕР", cover)
-        print("ЭТО КОВЕР СВЕРХУ")
+        cover = PostImageMapping.objects.all() # Используем post_id__in для фильтрации
+
         serializer = self.get_serializer(queryset, many=True)
         data = serializer.data
 
         # Добавить связанные изображения в каждый объект поста
         for post_data in data:
+          
             post_id = post_data['id']
+         
             
-            post_covers = PostImageMapping.objects.filter(post_uuid_in=post_id.all())  # Фильтруем изображения для текущего поста
+            post_covers = cover.filter(post_uuid=post_id)  # Фильтруем изображения для текущего поста
+            print("Здесь пост ковер")
             print(post_covers)
             post_data['cover'] = PostImageMappingSerializer(post_covers, many=True).data
-            print(post_data['cover'])
+            
 
         print("здесь ошибка 4")
 

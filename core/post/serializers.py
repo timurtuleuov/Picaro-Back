@@ -23,7 +23,7 @@ class PostImageMappingSerializer(serializers.ModelSerializer):
 
         # Добавить связанные изображения в каждый объект поста с порядковыми id
         for post_data in data:
-            post_id = post_data['__id']
+            post_id = post_data['_id']
             post_data['cover'] = PostImageMappingSerializer(cover.filter(post_id=post_id), many=True).data
 
         return Response(data)
