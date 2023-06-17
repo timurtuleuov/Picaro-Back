@@ -15,6 +15,19 @@ class PostImageMappingSerializer(serializers.ModelSerializer):
         model = PostImageMapping
         fields = ['id', 'image', 'post_id']
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        cover = PostImageMapping.objects.filter(post_id__in=queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+
+        # Добавить связанные изображения в каждый объект поста с порядковыми id
+        for post_data in data:
+            post_id = post_data['_id']
+            post_data['cover'] = PostImageMappingSerializer(cover.filter(post_id=post_id), many=True).data
+
+        return Response(data)
+
 
 class PostSerializer(AbstractSerializer):
     author = serializers.SlugRelatedField(queryset=User.objects.all(), slug_field='public_id')
@@ -50,5 +63,5 @@ class PostSerializer(AbstractSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'body', 'cover', 'edited', 'liked', 'likes_count', 'comment', 'created', 'updated']
+        fields = ['id', 'author', 'body', 'cover', 'edited', 'liked', 'likes_count', 'created', 'updated']
         read_only_fields = ["edited"]

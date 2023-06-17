@@ -3,16 +3,10 @@ from rest_framework import status
 from rest_framework.decorators import action
 
 from core.abstract.viewsets import AbstractViewSet
-
 from core.post.models import Post, PostImageMapping
 from core.post.serializers import PostSerializer, PostImageMappingSerializer
-
 from core.auth.permissions import UserPermission
 from core.user.models import User
-
-from core.comment.models import Comment
-from core.comment.serializers import CommentSerializer
-
 
 class PostViewSet(AbstractViewSet):
     http_method_names = ('post', 'get', 'put', 'delete')
@@ -25,7 +19,7 @@ class PostViewSet(AbstractViewSet):
         queryset = self.get_queryset()
                 
         cover = PostImageMapping.objects.all() # Используем post_id__in для фильтрации
-        comments = Comment.objects.all()
+
         serializer = self.get_serializer(queryset, many=True)
         data = serializer.data
 
@@ -34,11 +28,10 @@ class PostViewSet(AbstractViewSet):
           
             post_id = post_data['id']
          
-            post_comments = comments.filter(public_id=post_id)
+            
             post_covers = cover.filter(post_uuid=post_id)  # Фильтруем изображения для текущего поста
             
             post_data['cover'] = PostImageMappingSerializer(post_covers, many=True).data
-            post_data['comment'] = CommentSerializer(post_comments, many=True).data
 
         return Response(data)
 
@@ -85,3 +78,8 @@ class PostViewSet(AbstractViewSet):
         serializer = self.serializer_class(post)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    # def list(self, request, *args, **kwargs):
+    #     queryset = self.get_queryset()
+    #     serializer = self.get_serializer(queryset, many=True)
+    #     return Response(serializer.data)
