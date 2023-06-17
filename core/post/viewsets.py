@@ -29,7 +29,6 @@ class PostViewSet(AbstractViewSet):
         # Добавить связанные изображения и комментарии в каждый объект поста
         for post_data in data:
             post_id = post_data['id']
-            print(post_data)
             # Получить изображения для текущего поста
             post_covers = PostImageMapping.objects.filter(post_uuid=post_id)
             cover_serializer = PostImageMappingSerializer(post_covers, many=True)
@@ -37,6 +36,7 @@ class PostViewSet(AbstractViewSet):
 
             # Получить комментарии для текущего поста
             comments = Comment.objects.filter(post_uuid=post_id)
+            print(comments)
             comment_serializer = CommentSerializer(comments, many=True)
             post_data['comment'] = comment_serializer.data
 
