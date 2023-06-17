@@ -6,7 +6,7 @@ from core.abstract.serializers import AbstractSerializer
 from core.post.models import Post, PostImageMapping
 from core.user.models import User
 from core.user.serializers import UserSerializer
-
+from core.comment.serializers import CommentSerializer
 
 class PostImageMappingSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
@@ -34,6 +34,7 @@ class PostSerializer(AbstractSerializer):
     liked = serializers.SerializerMethodField()
     likes_count = serializers.SerializerMethodField()
     cover = PostImageMappingSerializer(source='images', many=True, read_only=True)
+    comment = CommentSerializer(many=True, read_only=True)
 
     def get_liked(self, instance):
         request = self.context.get('request', None)
@@ -63,5 +64,5 @@ class PostSerializer(AbstractSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'body', 'cover', 'edited', 'liked', 'likes_count', 'created', 'updated']
+        fields = ['id', 'author', 'body', 'cover', 'edited', 'liked', 'likes_count', 'comment', 'created', 'updated']
         read_only_fields = ["edited"]

@@ -12,6 +12,7 @@ class Comment(AbstractModel):
     author = models.ForeignKey("core_user.User", on_delete=models.CASCADE)
     body = models.TextField()
     edited = models.BooleanField(default=False)
+    post_uuid = models.UUIDField()
 
     objects = CommentManager()
 
