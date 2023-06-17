@@ -9,7 +9,7 @@ class Post(AbstractModel):
     body = models.TextField()
     edited = models.BooleanField(default=False)
     images = models.ManyToManyField("PostImageMapping", related_name="posts")
-
+    comment = models.ManyToManyField(to="core_comment.Comment", related_name="posts")
     objects = PostManager()
 
     def __str__(self):
