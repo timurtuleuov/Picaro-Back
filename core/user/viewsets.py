@@ -10,6 +10,9 @@ from core.post.serializers import PostImageMappingSerializer, PostSerializer
 from core.user.serializers import UserSerializer
 from core.user.models import User
 
+from django.shortcuts import get_object_or_404
+from rest_framework import status
+
 
 class UserViewSet(AbstractViewSet):
     http_method_names = ('patch', 'get')
@@ -48,3 +51,10 @@ class UserViewSet(AbstractViewSet):
             post_data['comment'] = comment_serializer.data
 
         return Response(data)
+    def get_user_info(self, request, *args, **kwargs):
+        slug = self.kwargs['slug']
+        user = get_object_or_404(User, slug=slug)
+        serializer = self.serializer_class(user)
+        
+
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

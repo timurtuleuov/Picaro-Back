@@ -36,4 +36,5 @@ urlpatterns = [
     *router.urls,
     *posts_router.urls,
     path('user/<slug:pk>/posts/', UserViewSet.as_view({'get': 'get_user_posts'}), name='user-posts'),
+    path('user/by_slug/<slug:slug>/', UserViewSet.as_view({'get': 'get_user_info'}), name='user-info')
 ]
