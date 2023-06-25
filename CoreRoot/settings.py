@@ -140,7 +140,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-MEDIA_ROOT = "E:/Программирование/DJANGO+REACT/Scripts/front/src/assets/"
+MEDIA_ROOT = "E:/Программирование/DJANGO+REACT/Scripts/Picaro-Front/src/assets/"
 MEDIA_URL = "/assets/"
 
 AUTH_USER_MODEL = 'core_user.User'

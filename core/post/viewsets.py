@@ -1,3 +1,4 @@
+from django.http import QueryDict
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import action
@@ -36,7 +37,6 @@ class PostViewSet(AbstractViewSet):
 
             # Получить комментарии для текущего поста
             comments = Comment.objects.filter(post_uuid=post_id)
-            print(comments)
             comment_serializer = CommentSerializer(comments, many=True)
             post_data['comment'] = comment_serializer.data
 
@@ -57,7 +57,9 @@ class PostViewSet(AbstractViewSet):
         cover_images = request.data.getlist('cover')  # Получаем список изображений
 
         for image in cover_images:
-            PostImageMapping.objects.create(post_id=post.id, image=image)
+            # PostImageMapping.objects.create(post_id=post.id, post_uuid=post.public_id, image=image)
+            mapping = PostImageMapping(post_id=post.id, post_uuid=post.public_id, image=image)
+            mapping.save()
 
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
