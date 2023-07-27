@@ -43,14 +43,6 @@ class UserManager(BaseUserManager, AbstractManager):
 
         return user
 
-class Friend(models.Model):
-    user = models.ForeignKey("User", related_name='friends', on_delete=models.CASCADE)
-    friend = models.ForeignKey("User", related_name='user_friends', on_delete=models.CASCADE)
-    created = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.user} - {self.friend}"
-
 class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
     username = models.CharField(db_index=True, max_length=255, unique=True)
     slug = AutoSlugField(populate_from='username', unique=True, null=True)
@@ -63,7 +55,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
 
     bio = models.TextField(null=True)
     avatar = models.ImageField(upload_to='avatar/', default='avatar/default-avatar.png')
-    friends = models.ManyToManyField("self", through=Friend, symmetrical=False)
+    friends = models.ManyToManyField("User", blank=True)
     posts_liked = models.ManyToManyField(
         "core_post.Post",
         related_name="liked_by"
@@ -98,3 +90,7 @@ class User(AbstractModel, AbstractBaseUser, PermissionsMixin):
 def generate_slug(sender, instance, **kwargs):
     if not instance.slug:
         instance.slug = slugify(instance.username)
+
+class Friend_Resquest(models.Model):
+    from_user = models.ForeignKey(User, related_name='from_user', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='to_user', on_delete=models.CASCADE)
