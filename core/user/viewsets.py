@@ -58,8 +58,11 @@ class UserViewSet(AbstractViewSet):
         
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
-    # def make_friend(self, request, *args, **kwargs):
-    #     user = User.objects.get_object_by_public_id(self.kwargs['pk'])
-    #     serializer = self.get_serializer(data = request.data)
-    #     self.perform_create(serializer)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    #TODO сделать отправку запросов, это должно добавляться в таблицу Friendship
+    def send_friend_request(self, request, *args, **kwargs):
+        pass
+    
+    #TODO сделать добавление друзей, это должно добавлять друга в поле friends таблицы User
+    def accept_friend_request(self, request, *args, **kwargs):
+        pass
