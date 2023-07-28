@@ -4,7 +4,7 @@ from core.post.viewsets import PostViewSet
 from core.user.viewsets import UserViewSet
 from core.auth.viewsets import RegisterViewSet, LoginViewSet, RefreshViewSet
 from core.comment.viewsets import CommentViewSet
-
+from core.user import viewsets
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
@@ -53,5 +53,5 @@ urlpatterns = [
     *posts_router.urls,
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('user/<slug:pk>/posts/', UserViewSet.as_view({'get': 'get_user_posts'}), name='user-posts'),
-    path('user/by_slug/<slug:slug>/', UserViewSet.as_view({'get': 'get_user_info'}), name='user-info')
+    path('user/by_slug/<slug:slug>/', UserViewSet.as_view({'get': 'get_user_info'}), name='user-info'),
 ]
